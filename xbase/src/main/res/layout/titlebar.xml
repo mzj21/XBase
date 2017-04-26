@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.xing.xbase.widget.TextAndImageView
+        android:id="@+id/titlebar_left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        app:taiv_src="@mipmap/back" />
+
+    <com.xing.xbase.widget.TextAndImageView
+        android:id="@+id/titlebar_mid"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/titlebar_left"
+        android:layout_toLeftOf="@+id/titlebar_right"
+        android:layout_toRightOf="@+id/titlebar_left"
+        android:layout_toStartOf="@+id/titlebar_right" />
+
+    <com.xing.xbase.widget.TextAndImageView
+        android:id="@+id/titlebar_right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>
