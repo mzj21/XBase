@@ -1,6 +1,8 @@
 package com.xing.xbase;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -105,5 +107,15 @@ public class FragmentBase extends Fragment {
      */
     protected void log(String s) {
         LogUtil.e(s);
+    }
+
+    /**
+     * 简化跳转
+     *
+     * @param context 上下文
+     * @param cls     class
+     */
+    protected void startActivity(Context context, Class<?> cls) {
+        startActivity(new Intent(context, cls));
     }
 }

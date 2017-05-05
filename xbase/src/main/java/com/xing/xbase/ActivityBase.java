@@ -27,7 +27,8 @@ public class ActivityBase extends AppCompatActivity {
     private RelativeLayout bottomview;
     private View addbottomview;
     private ProgressDialog progressDialog;
-    private RelativeLayout.LayoutParams lp;
+    private RelativeLayout.LayoutParams lp_bottom;
+    private RelativeLayout.LayoutParams lp_root;
     private int bottomHeight;
 
     @Override
@@ -35,19 +36,23 @@ public class ActivityBase extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_base);
         windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        lp_root = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         initBaseView();
         initView();
-        lp = new RelativeLayout.LayoutParams(
+        lp_bottom = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, bottomHeight);
         if (addbottomview != null) {
-            bottomview.addView(addbottomview, lp);
+            bottomview.addView(addbottomview, lp_bottom);
+            fragmentview.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+                }
+            });
+        } else {
+            fragmentview.setVisibility(View.GONE);
         }
-        fragmentview.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
         initLinster();
         initDatas();
     }
@@ -104,7 +109,7 @@ public class ActivityBase extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         View view = getLayoutInflater().inflate(layoutResID, null);
         if (rootview != null)
-            rootview.addView(view);
+            rootview.addView(view, lp_root);
     }
 
     /**
