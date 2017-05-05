@@ -4,12 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.xing.xbase.util.LogUtil;
 import com.xing.xbase.widget.TextAndImageView;
 import com.xing.xbase.widget.TitleBar;
 
@@ -17,7 +23,12 @@ public class ActivityBase extends AppCompatActivity {
     private WindowManager windowManager;
     private TitleBar titlebar;
     private RelativeLayout rootview;
+    private FrameLayout fragmentview;
+    private RelativeLayout bottomview;
+    private View addbottomview;
     private ProgressDialog progressDialog;
+    private RelativeLayout.LayoutParams lp;
+    private int bottomHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +37,24 @@ public class ActivityBase extends AppCompatActivity {
         windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         initBaseView();
         initView();
+        lp = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, bottomHeight);
+        if (addbottomview != null) {
+            bottomview.addView(addbottomview, lp);
+        }
+        fragmentview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         initLinster();
         initDatas();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     private void initBaseView() {
         rootview = getViewById(R.id.rootview);
+        fragmentview = getViewById(R.id.fragmentview);
         titlebar = getViewById(R.id.titlebar);
         titlebar.getleft().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,13 +62,23 @@ public class ActivityBase extends AppCompatActivity {
                 OnClickTitleBarLeft(titlebar.getleft());
             }
         });
+        bottomview = getViewById(R.id.bottomview);
         progressDialog = new ProgressDialog(this);
+    }
+
+    /**
+     * 初始化底部View
+     */
+    protected void initBottomView(View view, int height) {
+        addbottomview = view;
+        bottomHeight = height;
     }
 
     /**
      * 初始化View
      */
     protected void initView() {
+
     }
 
     /**
@@ -75,11 +103,8 @@ public class ActivityBase extends AppCompatActivity {
     @Override
     public void setContentView(int layoutResID) {
         View view = getLayoutInflater().inflate(layoutResID, null);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        lp.addRule(RelativeLayout.BELOW, R.id.titlebar);
         if (rootview != null)
-            rootview.addView(view, lp);
+            rootview.addView(view);
     }
 
     /**
@@ -195,5 +220,42 @@ public class ActivityBase extends AppCompatActivity {
      */
     protected void startActivity(Context context, Class<?> cls) {
         startActivity(new Intent(context, cls));
+    }
+
+    /**
+     * LOG打印
+     *
+     * @param s 内容
+     */
+    protected void log(String s) {
+        LogUtil.e(s);
+    }
+
+    protected void addFragment(Fragment targetFragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentview, targetFragment, "fragment")
+                .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+    }
+
+    //移除fragment
+    protected void removeFragment() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            finish();
+        }
+    }
+
+    //返回键返回事件
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+                finish();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

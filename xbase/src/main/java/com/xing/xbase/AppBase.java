@@ -23,5 +23,10 @@ public class AppBase extends Application {
         context = this;
         NetBase.init(); //网络基类初始化
         LogUtil.init(true);//LogUtil初始化
+        init();
+    }
+
+    protected void init(){
+
     }
 }
