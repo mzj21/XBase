@@ -57,7 +57,7 @@ public class FragmentBase extends Fragment {
     }
 
     public final <E extends View> E getViewById(int id) {
-        return (E) getActivity().findViewById(id);
+        return (E) ContentView.findViewById(id);
     }
 
     /**
