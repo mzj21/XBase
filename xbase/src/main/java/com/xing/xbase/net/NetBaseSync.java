@@ -1,6 +1,7 @@
 package com.xing.xbase.net;
 
 import com.google.gson.Gson;
+import com.xing.xbase.util.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,8 +56,11 @@ public class NetBaseSync extends NetBase {
         Call call = okHttpClient.newCall(request);
         try {
             Response response = call.execute();
+            String result = "";
+            if(response.body()!=null && !StringUtil.isEmpty(response.body().string())){
+                result = response.body().string();
+            }
             if (response.isSuccessful()) {
-                String result = response.body().string();
                 NetData<T> netData = new NetData<>();
                 netData.setCode(response.code());
                 netData.setMsg(response.message());
@@ -76,7 +80,7 @@ public class NetBaseSync extends NetBase {
                 netData.setData(single);
                 netCallBack.onSuccess(response.code(), netData);
             } else {
-                netCallBack.onFailure(call, response);
+                netCallBack.onFailure(call, result);
             }
         } catch (IOException e) {
             e.printStackTrace();

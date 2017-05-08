@@ -10,5 +10,5 @@ import okhttp3.Response;
 public interface NetCallBackBase<T> {
     void onSuccess(int Code, NetBase.NetData<T> netData);
 
-    void onFailure(Call call, Response response);
+    void onFailure(Call call, String msg);
 }

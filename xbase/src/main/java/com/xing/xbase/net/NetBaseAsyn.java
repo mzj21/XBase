@@ -1,5 +1,7 @@
 package com.xing.xbase.net;
 
+import com.xing.xbase.util.StringUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -57,13 +59,16 @@ public class NetBaseAsyn extends NetBase {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                netCallBack.onFailure(call, null);
+                netCallBack.onFailure(call, e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String result = "";
+                if(response.body()!=null && !StringUtil.isEmpty(response.body().string())){
+                    result = response.body().string();
+                }
                 if (response.isSuccessful()) {
-                    String result = response.body().string();
                     NetData<T> netData = new NetData<>();
                     netData.setCode(response.code());
                     netData.setMsg(response.message());
@@ -79,7 +84,7 @@ public class NetBaseAsyn extends NetBase {
                     netData.setData(single);
                     netCallBack.onSuccess(response.code(), netData);
                 } else {
-                    netCallBack.onFailure(call, response);
+                    netCallBack.onFailure(call, result);
                 }
             }
         });
