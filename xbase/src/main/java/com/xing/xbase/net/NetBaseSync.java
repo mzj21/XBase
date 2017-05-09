@@ -56,10 +56,7 @@ public class NetBaseSync extends NetBase {
         Call call = okHttpClient.newCall(request);
         try {
             Response response = call.execute();
-            String result = "";
-            if(response.body()!=null && !StringUtil.isEmpty(response.body().string())){
-                result = response.body().string();
-            }
+            String result = response.body().string();
             if (response.isSuccessful()) {
                 NetData<T> netData = new NetData<>();
                 netData.setCode(response.code());

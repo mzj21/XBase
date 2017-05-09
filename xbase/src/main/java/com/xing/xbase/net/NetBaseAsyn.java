@@ -64,10 +64,7 @@ public class NetBaseAsyn extends NetBase {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String result = "";
-                if(response.body()!=null && !StringUtil.isEmpty(response.body().string())){
-                    result = response.body().string();
-                }
+                String result = response.body().string();
                 if (response.isSuccessful()) {
                     NetData<T> netData = new NetData<>();
                     netData.setCode(response.code());
