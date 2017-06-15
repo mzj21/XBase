@@ -7,8 +7,10 @@ import com.xing.xbase.ActivityBase;
  */
 
 public class Acvitity_1 extends ActivityBase {
+
     @Override
     protected void initView() {
         setContentView(R.layout.activity_1);
+        setBaseViewBackgroundResource(R.color.themecolor);
     }
 }

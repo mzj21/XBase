@@ -17,7 +17,6 @@ import java.io.OutputStreamWriter;
  * 文件
  * Created by mzj on 2017/2/10.
  */
-
 public class FileUtil {
     private static String TAG = "FileUtil";
     public static String Path_Main;
@@ -26,6 +25,7 @@ public class FileUtil {
     public static void init(String packname) {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Path_Main = Environment.getExternalStorageDirectory() + "/" + packname;
+            Path_Temp = Path_Main + "/temp";
             deleteDir(new File(Path_Temp));
             createFile(Path_Main);
             createFile(Path_Temp);
@@ -164,12 +164,12 @@ public class FileUtil {
     }
 
     /**
-     * 递归删除目录下的所有文件及子目录下所有文件
+     * 递归删除目录下的所有文件及子目录下所有文件，该目录不删除
      *
      * @param dir 将要删除的文件目录
      */
     public static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
+        if (dir.exists() && dir.isDirectory()) {
             String[] children = dir.list();
             for (String aChildren : children) {
                 boolean success = deleteDir(new File(dir, aChildren));
@@ -178,7 +178,7 @@ public class FileUtil {
                 }
             }
         }
-        return dir.delete();
+        return true;
     }
 
     public static void deleteFile(String path) {

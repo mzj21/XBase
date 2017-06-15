@@ -2,8 +2,12 @@ package com.xing.xbase.net;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 /**
  * Created by mzj on 2017/3/16.
@@ -41,6 +45,22 @@ public class NetBase {
 
     public static OkHttpClient getOkHttpClient() {
         return okHttpClient;
+    }
+
+    public static OkHttpClient getProgressClient(final ProgressCall progressCall) {
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Response originalResponse = chain.proceed(chain.request());
+                return originalResponse.newBuilder()
+                        .body(new ProgressResponseBody(originalResponse.body(), progressCall))
+                        .build();
+            }
+        };
+
+        return new OkHttpClient.Builder()
+                .addNetworkInterceptor(interceptor)
+                .build();
     }
 
     public static class NetData<T> {

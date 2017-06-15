@@ -22,6 +22,7 @@ import com.xing.xbase.widget.TitleBar;
 public class ActivityBase extends AppCompatActivity {
     private WindowManager windowManager;
     private TitleBar titlebar;
+    private RelativeLayout baseview;
     private RelativeLayout rootview;
     private FrameLayout fragmentview;
     private RelativeLayout bottomview;
@@ -58,6 +59,7 @@ public class ActivityBase extends AppCompatActivity {
     }
 
     private void initBaseView() {
+        baseview = getViewById(R.id.baseview);
         rootview = getViewById(R.id.rootview);
         fragmentview = getViewById(R.id.fragmentview);
         titlebar = getViewById(R.id.titlebar);
@@ -65,6 +67,18 @@ public class ActivityBase extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 OnClickTitleBarLeft(titlebar.getleft());
+            }
+        });
+        titlebar.getmid().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnClickTitleBarMid(titlebar.getmid());
+            }
+        });
+        titlebar.getright().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnClickTitleBarRight(titlebar.getright());
             }
         });
         bottomview = getViewById(R.id.bottomview);
@@ -99,10 +113,24 @@ public class ActivityBase extends AppCompatActivity {
     }
 
     /**
-     * 返回键点击事件，可重写
+     * TitleBar中键点击事件，可重写
+     */
+    protected void OnClickTitleBarMid(TextAndImageView textAndImageView) {
+
+    }
+
+    /**
+     * TitleBar左键点击事件，可重写
      */
     protected void OnClickTitleBarLeft(TextAndImageView textAndImageView) {
         finish();
+    }
+
+    /**
+     * TitleBar右键点击事件，可重写
+     */
+    protected void OnClickTitleBarRight(TextAndImageView textAndImageView) {
+
     }
 
     @Override
@@ -110,6 +138,13 @@ public class ActivityBase extends AppCompatActivity {
         View view = getLayoutInflater().inflate(layoutResID, null);
         if (rootview != null)
             rootview.addView(view, lp_root);
+    }
+
+    /**
+     * 设置背景色
+     */
+    protected void setBaseViewBackgroundResource(int resid) {
+        baseview.setBackgroundResource(resid);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/baseview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -16,14 +17,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomview"
-        android:layout_below="@+id/titlebar"/>
+        android:layout_below="@+id/titlebar"
+        android:background="@color/white" />
 
     <FrameLayout
         android:id="@+id/fragmentview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomview"
-        android:layout_below="@+id/titlebar"/>
+        android:layout_below="@+id/titlebar" />
 
     <RelativeLayout
         android:id="@+id/bottomview"

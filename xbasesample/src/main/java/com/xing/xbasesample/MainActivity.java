@@ -15,6 +15,7 @@ public class MainActivity extends ActivityBase {
     protected void initView() {
         toggleTitleBarLeftVisible(false);
         setContentView(R.layout.activity_main);
+        setBaseViewBackgroundResource(R.color.black);
         main = getViewById(R.id.main);
         bottom = getLayoutInflater().inflate(R.layout.bottomview, null);
         initBottomView(bottom, getResources().getDimensionPixelOffset(R.dimen._40dp));
