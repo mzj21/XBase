@@ -201,8 +201,13 @@ public class ActivityBase extends AppCompatActivity {
      *
      * @param text 文本
      */
-    protected void toast(CharSequence text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    protected void toast(final CharSequence text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -210,8 +215,13 @@ public class ActivityBase extends AppCompatActivity {
      *
      * @param resId 文本ID
      */
-    protected void toast(int resId) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
+    protected void toast(final int resId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**

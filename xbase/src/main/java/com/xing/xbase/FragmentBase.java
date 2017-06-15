@@ -67,8 +67,13 @@ public class FragmentBase extends Fragment {
      *
      * @param text 文本
      */
-    protected void toast(CharSequence text) {
-        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+    protected void toast(final CharSequence text) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext().getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -76,8 +81,13 @@ public class FragmentBase extends Fragment {
      *
      * @param resId 文本ID
      */
-    protected void toast(int resId) {
-        Toast.makeText(getContext(), resId, Toast.LENGTH_SHORT).show();
+    protected void toast(final int resId) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext().getApplicationContext(), resId, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
