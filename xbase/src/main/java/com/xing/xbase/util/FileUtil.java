@@ -88,9 +88,10 @@ public class FileUtil {
         String filename = savePath + "/" + assetsName;
         File dir = new File(savePath);
         try {
-            if (!dir.exists()) {
-                dir.createNewFile();
+            if (dir.exists()) {
+                dir.delete();
             }
+            dir.createNewFile();
             if (!(new File(filename)).exists()) {
                 InputStream is = context.getResources().getAssets().open(assetsName);
                 FileOutputStream fos = new FileOutputStream(filename);
@@ -169,22 +170,15 @@ public class FileUtil {
      * @param dir 将要删除的文件目录
      */
     public static boolean deleteDir(File dir) {
-        if (dir.exists() && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String aChildren : children) {
-                boolean success = deleteDir(new File(dir, aChildren));
-                if (!success) {
-                    return false;
-                }
+        if (dir.isFile() || dir.list().length == 0) {
+            dir.delete();
+        } else {
+            File[] files = dir.listFiles();
+            for (File f : files) {
+                deleteDir(f);//递归删除每一个文件
+                f.delete();//删除该文件夹
             }
         }
         return true;
-    }
-
-    public static void deleteFile(String path) {
-        File file = new File(path);
-        if (file.exists()) {
-            file.delete();
-        }
     }
 }
