@@ -26,7 +26,7 @@ public class FileUtil {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Path_Main = Environment.getExternalStorageDirectory() + "/" + packname;
             Path_Temp = Path_Main + "/temp";
-            deleteDir(new File(Path_Temp));
+            delFile(Path_Temp);
             createFile(Path_Main);
             createFile(Path_Temp);
         }
@@ -167,18 +167,46 @@ public class FileUtil {
     /**
      * 递归删除目录下的所有文件及子目录下所有文件，该目录不删除
      *
-     * @param dir 将要删除的文件目录
+     * @param path 将要删除的文件目录
      */
-    public static boolean deleteDir(File dir) {
-        if (dir.isFile() || dir.list().length == 0) {
-            dir.delete();
-        } else {
-            File[] files = dir.listFiles();
-            for (File f : files) {
-                deleteDir(f);//递归删除每一个文件
-                f.delete();//删除该文件夹
+    public static boolean delFile(String path) {
+        boolean flag = false;
+        File file = new File(path);
+        if (!file.exists()) {
+            return flag;
+        }
+        if (!file.isDirectory()) {
+            return flag;
+        }
+        String[] tempList = file.list();
+        File temp = null;
+        for (int i = 0; i < tempList.length; i++) {
+            if (path.endsWith(File.separator)) {
+                temp = new File(path + tempList[i]);
+            } else {
+                temp = new File(path + File.separator + tempList[i]);
+            }
+            if (temp.isFile()) {
+                temp.delete();
+            }
+            if (temp.isDirectory()) {
+                delFile(path + "/" + tempList[i]);//先删除文件夹里面的文件
+                delFolder(path + "/" + tempList[i]);//再删除空文件夹
+                flag = true;
             }
         }
-        return true;
+        return flag;
+    }
+
+    public static void delFolder(String folderPath) {
+        try {
+            delFile(folderPath); //删除完里面所有内容
+            String filePath = folderPath;
+            filePath = filePath.toString();
+            java.io.File myFilePath = new java.io.File(filePath);
+            myFilePath.delete(); //删除空文件夹
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
