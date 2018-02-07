@@ -47,6 +47,10 @@ public class NetBase {
         return okHttpClient;
     }
 
+    public static void setOkHttpClient(OkHttpClient client) {
+        okHttpClient = client;
+    }
+
     public static OkHttpClient getProgressClient(final ProgressCall progressCall) {
         Interceptor interceptor = new Interceptor() {
             @Override
