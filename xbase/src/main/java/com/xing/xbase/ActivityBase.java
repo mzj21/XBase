@@ -393,24 +393,24 @@ public class ActivityBase extends AppCompatActivity {
         this.transaction = transaction;
     }
 
-    protected void switchFragment(Fragment fragment) {
-        if (from == fragment) {
+    protected void switchFragment(Fragment to) {
+        if (from == to) {
             return;
         }
-        if (!fragment.isAdded()) {
+        if (!to.isAdded()) {
             if (from == null) {
-                transaction.add(R.id.fragmentview, fragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
+                transaction.add(R.id.fragmentview, to).commit();
             } else {
-                transaction.hide(from).add(R.id.fragmentview, fragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
+                transaction.hide(from).add(R.id.fragmentview, to).commit();
             }
         } else {
             if (from == null) {
-                transaction.show(fragment).commit();
+                transaction.show(to).commit();
             } else {
-                transaction.hide(from).show(fragment).commit();
+                transaction.hide(from).show(to).commit();
             }
         }
-        from = fragment;
+        from = to;
     }
 
     //返回键返回事件
