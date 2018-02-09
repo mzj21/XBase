@@ -15,9 +15,11 @@ public class Acvitity_1 extends ActivityBase {
 
     @Override
     protected void initView() {
-        toggleTitleBarVisible(false);
-        setImmersive();
-        setContentView(R.layout.activity_1);
+        toggleTitleBarLeftVisible(false);
+        setTitle("activity_1");
+        getTitleBar().getmid().getTextView().setTextColor(getResources().getColor(R.color.black));
+        setContentView(R.layout.fragment2);
+        setStatusBar(true);
     }
 
     @Override

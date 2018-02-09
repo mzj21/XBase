@@ -13,15 +13,15 @@ public class MainActivity extends ActivityBase {
 
     @Override
     protected void initView() {
-        toggleTitleBarLeftVisible(false);
+        toggleTitleBarVisible(false);
         setContentView(R.layout.activity_main);
-        setStatusBarColor(R.color.red);
+        setImmersive();
         main = getViewById(R.id.main);
         bottom = getLayoutInflater().inflate(R.layout.bottomview, null);
         initBottomView(bottom, getResources().getDimensionPixelOffset(R.dimen._40dp));
         fragment1 = new Fragment1();
         fragment2 = new Fragment2();
-        addFragment(fragment1);
+        switchFragment(fragment1);
     }
 
     @Override
@@ -29,13 +29,13 @@ public class MainActivity extends ActivityBase {
         bottom.findViewById(R.id.f1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addFragment(fragment1);
+                switchFragment(fragment1);
             }
         });
         bottom.findViewById(R.id.f2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addFragment(fragment2);
+                switchFragment(fragment2);
             }
         });
     }

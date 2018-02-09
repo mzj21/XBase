@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +15,7 @@ import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -26,6 +26,7 @@ import com.xing.xbase.util.LogUtil;
 import com.xing.xbase.widget.TextAndImageView;
 import com.xing.xbase.widget.TitleBar;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class ActivityBase extends AppCompatActivity {
@@ -159,7 +160,7 @@ public class ActivityBase extends AppCompatActivity {
     }
 
     /**
-     * 设置状态栏沉浸颜色
+     * 设置状态栏颜色
      */
     protected void setStatusBarColor(int resid) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -172,6 +173,8 @@ public class ActivityBase extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(resid));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 
@@ -236,6 +239,83 @@ public class ActivityBase extends AppCompatActivity {
             e.printStackTrace();
         }
         return vh;
+    }
+
+    /**
+     * 已知系统类型时，设置状态栏黑色文字、图标。
+     * 适配4.4以上版本MIUIV、Flyme和6.0以上版本其他Android
+     */
+    public void setStatusBar(boolean dark) {
+        MIUISetStatusBarLightMode(dark);
+        FlymeSetStatusBarLightMode(dark);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            getWindow().getDecorView().setSystemUiVisibility(dark ? View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    : View.SYSTEM_UI_FLAG_VISIBLE);
+        }
+    }
+
+
+    /**
+     * 设置状态栏图标为深色和魅族特定的文字风格
+     * 可以用来判断是否为Flyme用户
+     *
+     * @param dark 是否把状态栏文字及图标颜色设置为深色
+     */
+    public void FlymeSetStatusBarLightMode(boolean dark) {
+        Window window = getWindow();
+        if (window != null) {
+            try {
+                WindowManager.LayoutParams lp = window.getAttributes();
+                Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
+                Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
+                darkFlag.setAccessible(true);
+                meizuFlags.setAccessible(true);
+                int bit = darkFlag.getInt(null);
+                int value = meizuFlags.getInt(lp);
+                if (dark) {
+                    value |= bit;
+                } else {
+                    value &= ~bit;
+                }
+                meizuFlags.setInt(lp, value);
+                window.setAttributes(lp);
+            } catch (Exception ignored) {
+
+            }
+        }
+    }
+
+    /**
+     * 需要MIUIV6以上
+     *
+     * @param dark 是否把状态栏文字及图标颜色设置为深色
+     */
+    public void MIUISetStatusBarLightMode(boolean dark) {
+        Window window = getWindow();
+        if (window != null) {
+            Class clazz = window.getClass();
+            try {
+                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+                int darkModeFlag = field.getInt(layoutParams);
+                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+                if (dark) {
+                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
+                } else {
+                    extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    //开发版 7.7.13 及以后版本采用了系统API，旧方法无效但不会报错，所以两个方式都要加上
+                    if (dark) {
+                        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    } else {
+                        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                    }
+                }
+            } catch (Exception ignored) {
+
+            }
+        }
     }
 
     /**
