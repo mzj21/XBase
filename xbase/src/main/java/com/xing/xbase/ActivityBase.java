@@ -41,7 +41,6 @@ public class ActivityBase extends AppCompatActivity {
     private RelativeLayout.LayoutParams lp_bottom;
     private RelativeLayout.LayoutParams lp_root;
     private int bottomHeight;
-    private FragmentTransaction transaction;
     private Fragment from;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -389,14 +388,11 @@ public class ActivityBase extends AppCompatActivity {
         }
     }
 
-    protected void setFragmentTransaction(FragmentTransaction transaction) {
-        this.transaction = transaction;
-    }
-
     protected void switchFragment(Fragment to) {
         if (from == to) {
             return;
         }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         if (!to.isAdded()) {
             if (from == null) {
                 transaction.add(R.id.fragmentview, to).commit();
