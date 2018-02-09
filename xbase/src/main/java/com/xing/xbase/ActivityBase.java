@@ -105,6 +105,11 @@ public class ActivityBase extends AppCompatActivity {
     protected void initBottomView(View view, int height) {
         addbottomview = view;
         bottomHeight = height;
+        if (checkDeviceHasNavigationBar()) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) navigationbarview.getLayoutParams();
+            params.height = 0;
+            navigationbarview.setLayoutParams(params);
+        }
     }
 
     /**
