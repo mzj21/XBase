@@ -389,7 +389,7 @@ public class ActivityBase extends AppCompatActivity {
         }
     }
 
-    protected void setFragmentTransaction(Fragment to, FragmentTransaction transaction) {
+    protected void setFragmentTransaction(FragmentTransaction transaction) {
         this.transaction = transaction;
     }
 
