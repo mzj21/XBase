@@ -183,7 +183,6 @@ public class ActivityBase extends AppCompatActivity {
      */
     protected void setImmersive() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             if (checkDeviceHasNavigationBar()) {
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) navigationbarview.getLayoutParams();

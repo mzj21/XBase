@@ -1,14 +1,12 @@
 package com.xing.xbasesample;
 
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.xing.xbase.ActivityBase;
 
 public class MainActivity extends ActivityBase {
     Fragment1 fragment1;
     Fragment2 fragment2;
-    RelativeLayout main;
     View bottom;
 
     @Override
@@ -16,7 +14,7 @@ public class MainActivity extends ActivityBase {
         toggleTitleBarVisible(false);
         setContentView(R.layout.activity_main);
         setImmersive();
-        main = getViewById(R.id.main);
+        setStatusBar(true);
         bottom = getLayoutInflater().inflate(R.layout.bottomview, null);
         initBottomView(bottom, getResources().getDimensionPixelOffset(R.dimen._40dp));
         fragment1 = new Fragment1();
