@@ -1,23 +1,32 @@
 package com.xing.xbase;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.xing.xbase.util.LogUtil;
 import com.xing.xbase.widget.TextAndImageView;
 import com.xing.xbase.widget.TitleBar;
+
+import java.lang.reflect.Method;
 
 public class ActivityBase extends AppCompatActivity {
     private WindowManager windowManager;
@@ -26,12 +35,16 @@ public class ActivityBase extends AppCompatActivity {
     private RelativeLayout rootview;
     private FrameLayout fragmentview;
     private RelativeLayout bottomview;
+    private View navigationbarview;
     private View addbottomview;
     private ProgressDialog progressDialog;
     private RelativeLayout.LayoutParams lp_bottom;
     private RelativeLayout.LayoutParams lp_root;
     private int bottomHeight;
+    private FragmentTransaction transaction;
+    private Fragment from;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +95,7 @@ public class ActivityBase extends AppCompatActivity {
             }
         });
         bottomview = getViewById(R.id.bottomview);
+        navigationbarview = getViewById(R.id.navigationbarview);
         progressDialog = new ProgressDialog(this);
     }
 
@@ -141,10 +155,83 @@ public class ActivityBase extends AppCompatActivity {
     }
 
     /**
-     * 设置背景色
+     * 设置状态栏沉浸颜色
      */
-    protected void setBaseViewBackgroundResource(int resid) {
-        baseview.setBackgroundResource(resid);
+    protected void setStatusBarColor(int resid) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(resid));
+        }
+    }
+
+    /**
+     * 设置图片沉浸状态
+     */
+    protected void setImmersive() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            if (checkDeviceHasNavigationBar()) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) navigationbarview.getLayoutParams();
+                params.height = getVirtualBarHeigh();
+                navigationbarview.setLayoutParams(params);
+                navigationbarview.setBackgroundColor(getResources().getColor(R.color.black));
+            }
+        }
+    }
+
+    /**
+     * 检测是否有虚拟按键
+     *
+     * @return 是否
+     */
+    protected boolean checkDeviceHasNavigationBar() {
+        boolean hasNavigationBar = false;
+        Resources rs = getResources();
+        int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (id > 0) {
+            hasNavigationBar = rs.getBoolean(id);
+        }
+        try {
+            Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
+            Method m = systemPropertiesClass.getMethod("get", String.class);
+            String navBarOverride = (String) m.invoke(systemPropertiesClass, "qemu.hw.mainkeys");
+            if ("1".equals(navBarOverride)) {
+                hasNavigationBar = false;
+            } else if ("0".equals(navBarOverride)) {
+                hasNavigationBar = true;
+            }
+        } catch (Exception ignored) {
+        }
+        return hasNavigationBar;
+    }
+
+    /**
+     * 虚拟按键高度
+     *
+     * @return 高度
+     */
+    protected int getVirtualBarHeigh() {
+        int vh = 0;
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics dm = new DisplayMetrics();
+        try {
+            Class c = Class.forName("android.view.Display");
+            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
+            method.invoke(display, dm);
+            vh = dm.heightPixels - windowManager.getDefaultDisplay().getHeight();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vh;
     }
 
     /**
@@ -295,6 +382,30 @@ public class ActivityBase extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    protected void setFragmentTransaction(Fragment to, FragmentTransaction transaction) {
+        this.transaction = transaction;
+    }
+
+    protected void switchFragment(Fragment fragment) {
+        if (from == fragment) {
+            return;
+        }
+        if (!fragment.isAdded()) {
+            if (from == null) {
+                transaction.add(R.id.fragmentview, fragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
+            } else {
+                transaction.hide(from).add(R.id.fragmentview, fragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
+            }
+        } else {
+            if (from == null) {
+                transaction.show(fragment).commit();
+            } else {
+                transaction.hide(from).show(fragment).commit();
+            }
+        }
+        from = fragment;
     }
 
     //返回键返回事件

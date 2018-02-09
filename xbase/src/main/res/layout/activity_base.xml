@@ -8,7 +8,7 @@
     <com.xing.xbase.widget.TitleBar
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@color/themecolor" />
 
@@ -16,7 +16,7 @@
         android:id="@+id/rootview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomview"
+        android:layout_above="@+id/ll_bottom"
         android:layout_below="@+id/titlebar"
         android:background="@color/white" />
 
@@ -24,12 +24,24 @@
         android:id="@+id/fragmentview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomview"
+        android:layout_above="@+id/ll_bottom"
         android:layout_below="@+id/titlebar" />
 
-    <RelativeLayout
-        android:id="@+id/bottomview"
+    <LinearLayout
+        android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/bottomview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/navigationbarview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+    </LinearLayout>
 </RelativeLayout>

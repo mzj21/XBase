@@ -5,13 +5,6 @@ import com.xing.xbase.net.NetBase;
 import com.xing.xbase.net.NetBaseSync;
 import com.xing.xbase.util.FileUtil;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
 import okhttp3.Call;
 
 /**
@@ -22,8 +15,9 @@ public class Acvitity_1 extends ActivityBase {
 
     @Override
     protected void initView() {
+        toggleTitleBarVisible(false);
+        setImmersive();
         setContentView(R.layout.activity_1);
-        setBaseViewBackgroundResource(R.color.themecolor);
     }
 
     @Override
