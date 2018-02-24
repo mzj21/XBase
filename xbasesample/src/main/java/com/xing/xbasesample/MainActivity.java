@@ -12,9 +12,9 @@ public class MainActivity extends ActivityBase {
     @Override
     protected void initView() {
         toggleTitleBarVisible(false);
-        setContentView(R.layout.activity_main);
         setImmersive();
         setStatusBar(true);
+        setContentView(R.layout.activity_main);
         bottom = getLayoutInflater().inflate(R.layout.bottomview, null);
         initBottomView(bottom, getResources().getDimensionPixelOffset(R.dimen._40dp));
         fragment1 = new Fragment1();

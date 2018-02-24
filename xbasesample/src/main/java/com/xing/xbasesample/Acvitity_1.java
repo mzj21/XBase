@@ -1,8 +1,11 @@
 package com.xing.xbasesample;
 
+import android.os.Build;
+
 import com.xing.xbase.ActivityBase;
 import com.xing.xbase.net.NetBase;
 import com.xing.xbase.net.NetBaseSync;
+import com.xing.xbase.util.CommonUtil;
 import com.xing.xbase.util.FileUtil;
 
 import okhttp3.Call;
@@ -18,8 +21,12 @@ public class Acvitity_1 extends ActivityBase {
         toggleTitleBarLeftVisible(false);
         setTitle("activity_1");
         getTitleBar().getmid().getTextView().setTextColor(getResources().getColor(R.color.black));
-        setContentView(R.layout.fragment2);
         setStatusBar(true);
+        setImmersive();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getTitleBar().setPadding(0, CommonUtil.getStatusBarHeight(this), 0, 0);
+        }
+        setContentView(R.layout.fragment2);
     }
 
     @Override

@@ -174,11 +174,14 @@ public class ActivityBase extends AppCompatActivity {
     }
 
     /**
-     * 设置图片沉浸状态
+     * 设置沉浸状态
      */
     protected void setImmersive() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             if (checkDeviceHasNavigationBar()) {
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) navigationbarview.getLayoutParams();
                 params.height = getVirtualBarHeigh();
@@ -242,7 +245,7 @@ public class ActivityBase extends AppCompatActivity {
     public void setStatusBar(boolean dark) {
         MIUISetStatusBarLightMode(dark);
         FlymeSetStatusBarLightMode(dark);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(dark ? View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                     : View.SYSTEM_UI_FLAG_VISIBLE);
         }
