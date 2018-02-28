@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -36,7 +35,6 @@ public class ActivityBase extends AppCompatActivity {
     private RelativeLayout rootview;
     private FrameLayout fragmentview;
     private RelativeLayout bottomview;
-    private View navigationbarview;
     private View addbottomview;
     private ProgressDialog progressDialog;
     private RelativeLayout.LayoutParams lp_bottom;
@@ -95,7 +93,6 @@ public class ActivityBase extends AppCompatActivity {
             }
         });
         bottomview = getViewById(R.id.bottomview);
-        navigationbarview = getViewById(R.id.navigationbarview);
         progressDialog = new ProgressDialog(this);
     }
 
@@ -179,14 +176,6 @@ public class ActivityBase extends AppCompatActivity {
     protected void setImmersive() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (checkDeviceHasNavigationBar()) {
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) navigationbarview.getLayoutParams();
-                params.height = getVirtualBarHeigh();
-                navigationbarview.setLayoutParams(params);
-                navigationbarview.setBackgroundColor(getResources().getColor(R.color.black));
-            }
         }
     }
 

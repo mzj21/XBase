@@ -37,10 +37,5 @@
             android:id="@+id/bottomview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <View
-            android:id="@+id/navigationbarview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
     </LinearLayout>
 </RelativeLayout>
