@@ -26,7 +26,7 @@ public class Acvitity_1 extends ActivityBase {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getTitleBar().setPadding(0, CommonUtil.getStatusBarHeight(this), 0, 0);
         }
-        setContentView(R.layout.fragment2);
+        setContentView(R.layout.activity_1);
     }
 
     @Override

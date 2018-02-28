@@ -10,6 +10,6 @@ public class Fragment2 extends FragmentBase {
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_1);
+        setContentView(R.layout.fragment2);
     }
 }
