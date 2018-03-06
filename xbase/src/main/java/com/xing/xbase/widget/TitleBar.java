@@ -24,14 +24,10 @@ public class TitleBar extends RelativeLayout {
 
     public TitleBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
-    }
-
-    private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.titlebar, this);
-        left = (TextAndImageView) findViewById(R.id.titlebar_left);
-        mid = (TextAndImageView) findViewById(R.id.titlebar_mid);
-        right = (TextAndImageView) findViewById(R.id.titlebar_right);
+        LayoutInflater.from(context).inflate(R.layout.titlebar, this);
+        left = findViewById(R.id.titlebar_left);
+        mid = findViewById(R.id.titlebar_mid);
+        right = findViewById(R.id.titlebar_right);
     }
 
     public TextAndImageView getleft() {

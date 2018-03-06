@@ -15,7 +15,7 @@ allprojects {
 Step 2. Add the dependency
 ```
 dependencies {
-	    compile 'com.github.mzj21:XBase:1.2.0'
+	    compile 'com.github.mzj21:XBase:1.2.1'
 }
 ```
 Step 3. Change compileSdkVersion

@@ -18,7 +18,6 @@ import com.xing.xbase.R;
 public class TextAndImageView extends FrameLayout {
     private TextView tv;
     private ImageView iv;
-    private int imageResource;
 
     public TextAndImageView(Context context) {
         this(context, null, 0);
@@ -32,9 +31,9 @@ public class TextAndImageView extends FrameLayout {
         super(context, attrs, defStyle);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TextAndImageView);
         Drawable d = ta.getDrawable(R.styleable.TextAndImageView_taiv_src);
-        LayoutInflater.from(getContext()).inflate(R.layout.textandimageview, this);
-        tv = (TextView) findViewById(R.id.tv);
-        iv = (ImageView) findViewById(R.id.iv);
+        LayoutInflater.from(context).inflate(R.layout.textandimageview, this);
+        tv = findViewById(R.id.tv);
+        iv = findViewById(R.id.iv);
         if (d != null) {
             iv.setImageDrawable(d);
         }
