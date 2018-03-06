@@ -3,12 +3,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.mzj21'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -16,7 +16,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.3.0'
+    //noinspection GradleCompatible
+    compile 'com.android.support:appcompat-v7:26+'
+    compile 'com.android.support:support-v4:26+'
     compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.squareup.okio:okio:1.12.0'
     compile 'com.google.code.gson:gson:2.8.0'
