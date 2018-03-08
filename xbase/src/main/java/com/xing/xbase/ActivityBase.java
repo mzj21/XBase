@@ -322,6 +322,19 @@ public class ActivityBase extends AppCompatActivity {
     }
 
     /**
+     * TitleBar是否覆盖显示
+     *
+     * @param isCover 是否覆盖
+     */
+    protected void toggleTitleBarCover(boolean isCover) {
+        RelativeLayout.LayoutParams params_rootview = (RelativeLayout.LayoutParams) rootview.getLayoutParams();
+        params_rootview.addRule(RelativeLayout.BELOW, isCover ? R.id.baseview : R.id.titlebar);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) fragmentview.getLayoutParams();
+        params.addRule(RelativeLayout.BELOW, isCover ? R.id.baseview : R.id.fragmentview);
+        titlebar.setBackgroundColor(getResources().getColor(R.color.transparent));
+    }
+
+    /**
      * 获取TitleBar实例
      *
      * @return TitleBar

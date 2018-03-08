@@ -1,6 +1,7 @@
 package com.xing.xbasesample;
 
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import com.xing.xbase.ActivityBase;
 import com.xing.xbase.net.NetBase;
@@ -19,6 +20,7 @@ public class Acvitity_1 extends ActivityBase {
     @Override
     protected void initView() {
         toggleTitleBarLeftVisible(false);
+        toggleTitleBarCover(true);
         setTitle("activity_1");
         getTitleBar().getmid().getTextView().setTextColor(getResources().getColor(R.color.black));
         setStatusBar(true);
