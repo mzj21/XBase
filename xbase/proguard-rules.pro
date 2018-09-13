@@ -1,1 +1,1 @@
--keep class xbase.** {*;}
+-keep class com.xing.xbase.** {*;}
