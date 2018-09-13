@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import com.xing.xbase.widget.TitleBar;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+@Keep
 public class ActivityBase extends AppCompatActivity {
     private WindowManager windowManager;
     private TitleBar titlebar;
