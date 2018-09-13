@@ -29,7 +29,6 @@ import com.xing.xbase.widget.TitleBar;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-@Keep
 public class ActivityBase extends AppCompatActivity {
     private WindowManager windowManager;
     private TitleBar titlebar;
