@@ -15,6 +15,6 @@ allprojects {
 Step 2. Add the dependency
 ```
 dependencies {
-	    compile 'com.github.mzj21:XBase:1.3.7'
+	    compile 'com.github.mzj21:XBase:1.3.8'
 }
 ```
